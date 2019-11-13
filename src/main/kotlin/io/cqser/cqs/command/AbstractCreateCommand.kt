@@ -27,8 +27,8 @@ abstract class AbstractCreateCommandHandler<TRequest : AbstractCreateCommand<TRe
     override fun handle(command: TRequest): TResponse {
         val toCreate = command.toCreate
 
-        validate(toCreate)
-        handleCreate(toCreate)
+        validate(toCreate, command)
+        handleCreate(toCreate, command)
         save(toCreate)
         emitEvent(toCreate)
 
@@ -37,6 +37,10 @@ abstract class AbstractCreateCommandHandler<TRequest : AbstractCreateCommand<TRe
 
     protected open fun save(toCreate: TResponse) {
         jpaRepository.save(toCreate)
+    }
+
+    protected open fun validate(toCreate: TResponse, command: TRequest) {
+        validate(toCreate)
     }
 
     protected open fun validate(toCreate: TResponse) {
@@ -52,6 +56,10 @@ abstract class AbstractCreateCommandHandler<TRequest : AbstractCreateCommand<TRe
 
     protected open fun getToValidate(toCreate: TResponse): Any? {
         return null
+    }
+
+    protected open fun handleCreate(toCreate: TResponse, command: TRequest) {
+        handleCreate(toCreate);
     }
 
     protected open fun handleCreate(toCreate: TResponse) {

@@ -27,9 +27,9 @@ abstract class AbstractUpdateCommandHandler<TRequest : AbstractUpdateCommand<TRe
         val original = getCloned(updated)
         val update = command.update
 
-        validate(original, update)
+        validate(original, update, command)
         deepCopyProperties(updated, update)
-        handleUpdate(updated, original)
+        handleUpdate(updated, original, command)
         emitEvent(updated, original)
 
         return updated
@@ -40,7 +40,9 @@ abstract class AbstractUpdateCommandHandler<TRequest : AbstractUpdateCommand<TRe
     @Autowired
     private val mediator: Mediator? = null
 
-
+    protected open fun validate(original: TResponse?, update: TResponse, command: TRequest) {
+        validate(original, update)
+    }
 
     protected open fun validate(original: TResponse?, update: TResponse) {
         Optional
@@ -55,6 +57,10 @@ abstract class AbstractUpdateCommandHandler<TRequest : AbstractUpdateCommand<TRe
 
     protected open fun getToValidate(original: TResponse?, update: TResponse): Any? {
         return null
+    }
+
+    protected open fun handleUpdate(updated: TResponse, original: TResponse?, command: TRequest) {
+        handleUpdate(updated, original)
     }
 
     protected open fun handleUpdate(updated: TResponse, original: TResponse?) {

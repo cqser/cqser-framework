@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.cqser"
-version = "0.9-RELEASE"
+version = "0.9.1-RELEASE"
 
 repositories {
     jcenter()
@@ -61,7 +61,7 @@ publishing {
     publications {
         create("mavenJava", MavenPublication::class.java).apply {
             groupId = project.group.toString()
-            this.artifactId = "cqser-spring-data-jpa"
+            this.artifactId = artifactId
             version = project.version.toString()
             pom {
                 description.set("Implementation of CQS pattern using Mediatr for JVM and Spring Framework")
@@ -97,7 +97,8 @@ bintray {
     user = System.getenv("BINTRAY_USER")
     key = System.getenv("BINTRAY_API_KEY")
     pkg(closureOf<BintrayExtension.PackageConfig> {
-        repo = "maven-public"
+        userOrg = "cqser"
+        repo = "CQSER-maven"
         name = "cqser-spring-data-jpa"
         setLicenses("Apache-2.0")
         vcsUrl = "https://github.com/cqser/cqser-framework"

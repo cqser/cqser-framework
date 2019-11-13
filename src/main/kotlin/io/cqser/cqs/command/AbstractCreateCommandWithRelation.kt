@@ -30,8 +30,8 @@ abstract class AbstractCreateCommandHandlerWithRelation<TRelation, TRequest : Ab
         val toCreate = command.toCreate
         val relation = relationJpaRepository.findById(command.relationId).orElseThrow { buildException(command.relationId, clazz) }
 
-        validate(toCreate, relation)
-        handleCreate(toCreate, relation)
+        validate(toCreate, relation, command)
+        handleCreate(toCreate, relation, command)
         save(toCreate)
         emitEvent(toCreate)
 
@@ -40,6 +40,10 @@ abstract class AbstractCreateCommandHandlerWithRelation<TRelation, TRequest : Ab
 
     protected open fun save(toCreate: TResponse) {
         jpaRepository.save(toCreate)
+    }
+
+    protected open fun validate(toCreate: TResponse, relation: TRelation, command: TRequest) {
+        validate(toCreate, relation)
     }
 
     protected open fun validate(toCreate: TResponse, relation: TRelation) {
@@ -55,6 +59,10 @@ abstract class AbstractCreateCommandHandlerWithRelation<TRelation, TRequest : Ab
 
     protected open fun getToValidate(toCreate: TResponse, relation: TRelation): Any? {
         return null
+    }
+
+    protected open fun handleCreate(toCreate: TResponse, relation: TRelation, command: TRequest) {
+        handleCreate(toCreate, relation)
     }
 
     protected open fun handleCreate(toCreate: TResponse, relation: TRelation) {
