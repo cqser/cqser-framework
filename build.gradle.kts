@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "io.cqser"
-version = "1.1-RELEASE"
+version = "0.9-RELEASE"
 
 repositories {
     jcenter()
